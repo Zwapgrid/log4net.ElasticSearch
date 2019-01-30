@@ -13,9 +13,9 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
         const string Host = "";
         const string Port = "";
         const string Index = "";
-
-        [Fact]
-        private void Can_post_to_elastic_cloud_instance()
+        
+        [Fact(Skip = "Set creds to run for real")]
+        public void Can_post_to_elastic_cloud_instance()
         {
             var date = new DateTime();
             string uri = $"https://{UserName}:{Password}@{Host}:{Port}/{Index}-{date:yyyy-MM-dd}/logEvent/_bulk";
@@ -28,8 +28,8 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(HttpClientTests));
 
-        [Fact]
-        private void Can_post_bulk_to_elastic_cloud_instance()
+        [Fact(Skip = "Set creds to run for real")]
+        public void Can_post_bulk_to_elastic_cloud_instance()
         {
             var date = new DateTime();
 

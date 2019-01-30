@@ -10,7 +10,7 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
 
         public IntegrationTestFixture()
         {
-            _defaultIndex = GetDefaultIndex();
+            _defaultIndex = Environment.GetEnvironmentVariable("log4net_ElasticSearch_Index") ?? GetDefaultIndex();
 
             Client = new ElasticClient(ConnectionSettings(_defaultIndex));
 
@@ -26,12 +26,14 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
 
         static string GetDefaultIndex()
         {
-            return $"{"log_test"}";
+            return "log_test";
         }
 
         static ConnectionSettings ConnectionSettings(string index)
         {
-            var defaultConnectionSettings = new ConnectionSettings(ElasticSearchUri()).
+            var esUri = Environment.GetEnvironmentVariable("log4net_ElasticSearch_Uri") ?? GetDefaultUri();
+
+            var defaultConnectionSettings = new ConnectionSettings(new Uri(esUri)).
                 DefaultIndex(index).                
                 DefaultTypeNameInferrer(t => t.Name).
                 DefaultFieldNameInferrer(p => p);
@@ -43,9 +45,9 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
                              Proxy(new Uri("http://localhost:8888"), "", "");
         }
 
-        static Uri ElasticSearchUri()
+        static string GetDefaultUri()
         {
-            return new Uri(string.Format("http://{0}:9200", "127.0.0.1".ToString()));
+            return "http://127.0.0.1:9200";
         }
 
         void DeleteDefaultIndex()
