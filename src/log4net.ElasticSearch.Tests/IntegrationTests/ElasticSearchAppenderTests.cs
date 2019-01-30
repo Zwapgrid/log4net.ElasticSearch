@@ -12,15 +12,15 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
     [Collection("IndexCollection")]
     public class ElasticSearchAppenderTests
     {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(ElasticSearchAppenderTests));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ElasticSearchAppenderTests));
 
-        private IntegrationTestFixture testFixture;
-        private ElasticClient elasticClient;
+        private IntegrationTestFixture _testFixture;
+        private readonly ElasticClient _elasticClient;
 
         public ElasticSearchAppenderTests(IntegrationTestFixture testFixture)
         {
-            this.testFixture = testFixture;
-            elasticClient = testFixture.Client;
+            _testFixture = testFixture;
+            _elasticClient = testFixture.Client;
         }
 
         [Fact]
@@ -28,12 +28,12 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
         {
             var message = Faker.Lorem.Words(1).Single();
 
-            _log.Info(message, new ApplicationException(Faker.Lorem.Words(1).Single()));
+            Log.Info(message, new ApplicationException(Faker.Lorem.Words(1).Single()));
 
             Retry.Ignoring<XunitException>(() =>
             {
                 var logEntries =
-                    elasticClient.Search<logEvent>(s => s.Query(qd => qd.Term(le => le.message, message)));
+                    _elasticClient.Search<logEvent>(s => s.Query(qd => qd.Term(le => le.message, message)));
 
                 logEntries.Total.Should().Be(1);
             });
@@ -49,13 +49,13 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
             }
             catch (Exception ex)
             {
-                _log.Error(message, ex);
+                Log.Error(message, ex);
             }
 
             Retry.Ignoring<XunitException>(() =>
             {
                 var logEntries =
-                    elasticClient.Search<logEvent>(s => s.Query(qd => qd.Term(le => le.message, message)));
+                    _elasticClient.Search<logEvent>(s => s.Query(qd => qd.Term(le => le.message, message)));
 
                 logEntries.Total.Should().Be(1);
             });
@@ -71,13 +71,13 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
             }
             catch (Exception ex)
             {
-                _log.Error(message, ex);
+                Log.Error(message, ex);
             }
 
             Retry.Ignoring<XunitException>(() =>
             {
                 var logEntries =
-                    elasticClient.Search<logEvent>(s => s.Query(qd => qd.Term(le => le.message, message)));
+                    _elasticClient.Search<logEvent>(s => s.Query(qd => qd.Term(le => le.message, message)));
 
                 logEntries.Total.Should().Be(1);
             });
@@ -93,12 +93,12 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
 
             GlobalContext.Properties[globalPropertyName] = globalProperty;
 
-            _log.Info(message);
+            Log.Info(message);
 
             Retry.Ignoring<XunitException>(() =>
                 {
                     var logEntries =
-                        elasticClient.Search<logEvent>(sd => sd.Query(qd => qd.Term(le => le.message, message)));
+                        _elasticClient.Search<logEvent>(sd => sd.Query(qd => qd.Term(le => le.message, message)));
 
                     logEntries.Total.Should().Be(1);
 
@@ -118,12 +118,12 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
 
             ThreadContext.Properties[threadPropertyName] = threadProperty;
 
-            _log.Info(message);
+            Log.Info(message);
 
             Retry.Ignoring<XunitException>(() =>
                 {
                     var logEntries =
-                        elasticClient.Search<logEvent>(sd => sd.Query(qd => qd.Term(le => le.message, message)));
+                        _elasticClient.Search<logEvent>(sd => sd.Query(qd => qd.Term(le => le.message, message)));
 
                     logEntries.Total.Should().Be(1);
 
@@ -143,12 +143,12 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
 
             LogicalThreadContext.Properties[localThreadPropertyName] = localTreadProperty;
 
-            _log.Info(message);
+            Log.Info(message);
 
             Retry.Ignoring<XunitException>(() =>
                 {
                     var logEntries =
-                        elasticClient.Search<logEvent>(sd => sd.Query(qd => qd.Term(le => le.message, message)));
+                        _elasticClient.Search<logEvent>(sd => sd.Query(qd => qd.Term(le => le.message, message)));
 
                 logEntries.Total.Should().Be(1);
 

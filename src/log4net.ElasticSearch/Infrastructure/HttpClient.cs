@@ -61,7 +61,8 @@ namespace log4net.ElasticSearch.Infrastructure
 
             using (var streamWriter = GetRequestStream(httpWebRequest))
             {
-                streamWriter.Write(postBody.ToString());
+                var body = postBody.ToString();
+                streamWriter.Write(body);
                 streamWriter.Flush();
 
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
@@ -70,7 +71,7 @@ namespace log4net.ElasticSearch.Infrastructure
                 if (httpResponse.StatusCode != HttpStatusCode.Created && httpResponse.StatusCode != HttpStatusCode.OK)
                 {
                     throw new WebException(
-                        "Failed to post {0} to {1}.".With(postBody.ToString(), uri));
+                        "Failed to post {0} to {1}.".With(body, uri));
                 }
             }
         }

@@ -124,7 +124,7 @@ namespace log4net.ElasticSearch.Tests.UnitTests
                     () =>
                     context.Appender.AppendAndClose(LoggingEventsBuilder.MultiplesOf(context.Appender.BufferSize).ToArray());
 
-                logErrorWhenElasticSearch.ShouldNotThrow();
+                logErrorWhenElasticSearch.Should().NotThrow();
             }
         }
 

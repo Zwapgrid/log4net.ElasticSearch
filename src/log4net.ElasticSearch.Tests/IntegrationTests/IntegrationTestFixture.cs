@@ -6,13 +6,13 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
 {
     public class IntegrationTestFixture : IDisposable
     {
-        readonly string defaultIndex;
+        readonly string _defaultIndex;
 
         public IntegrationTestFixture()
         {
-            defaultIndex = GetDefaultIndex();
+            _defaultIndex = GetDefaultIndex();
 
-            Client = new ElasticClient(ConnectionSettings(defaultIndex));
+            Client = new ElasticClient(ConnectionSettings(_defaultIndex));
 
             DeleteDefaultIndex();
         }
@@ -26,7 +26,7 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
 
         static string GetDefaultIndex()
         {
-            return string.Format("{0}", "log_test");
+            return $"{"log_test"}";
         }
 
         static ConnectionSettings ConnectionSettings(string index)
@@ -50,7 +50,7 @@ namespace log4net.ElasticSearch.Tests.IntegrationTests
 
         void DeleteDefaultIndex()
         {
-            Client.DeleteIndex(new DeleteIndexRequest(defaultIndex));
+            Client.DeleteIndex(new DeleteIndexRequest(_defaultIndex));
         }
     }
 

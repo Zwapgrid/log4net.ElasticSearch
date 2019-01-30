@@ -45,7 +45,7 @@ namespace log4net.ElasticSearch
 
             // Artificially add the buffer size to the connection string so it can be parsed
             // later to decide if we should send a _bulk API call
-            ConnectionString += string.Format(";BufferSize={0}", BufferSize);
+            ConnectionString += $";BufferSize={BufferSize}";
             repository = CreateRepository(ConnectionString);            
         }
 
